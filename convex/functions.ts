@@ -16,9 +16,14 @@ export const sendImage = mutation({
 
 // Get image storageId from database
 export const list = query({
-    args: {},
-    handler: async (ctx) => {
-        const doodles = await ctx.db.query("doodles").collect();
+    args: {limit:v.optional(v.number())},
+    handler: async (ctx, args) => {
+        let doodles;
+        if (args.limit){
+            doodles = await ctx.db.query("doodles").take(args.limit);
+        } else {
+            doodles = await ctx.db.query("doodles").collect();
+        }
         return Promise.all(
             doodles.map(async (doodle) => ({
                 ...doodle,
