@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
 const TIMEFORDRAWING = 5;
-const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage"
+const SEND_IMG_URL = "https://descriptive-perch-312.convex.site/sendImage"
 const host = window.location.hostname
 
 export default function Drawing() {
@@ -29,15 +29,15 @@ export default function Drawing() {
   const submitForm = () => {
     closeModal();
     if (selectedImage) {
-      console.log("Sent Image with username:", username);
-      fetch(SEND_IMG_URL, {
+      fetch(SEND_IMG_URL+"?author="+username, {
         method: "POST",
         headers: { "Content-Type": selectedImage.type },
         body: selectedImage, 
       }).then(() => {
+        console.log("Sent Image with username:", username);
         window.location.href = `/gallery`;
       }).catch(() => {
-        window.location.href = `/gallery`;
+        // window.location.href = `/gallery`;
       });
     }
   };
