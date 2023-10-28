@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 // import './App.css';
 
 const TIMEFORDRAWING = 5;
-const SEND_IMG_URL = ""
+const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage"
 const host = window.location.hostname
 
 export default function Drawing() {
@@ -32,7 +32,7 @@ export default function Drawing() {
       console.log("Sent Image")
       fetch(SEND_IMG_URL, {
         method: "POST",
-        headers: { "Content-Type": selectedImage.type },
+        headers: { "Content-Type": selectedImage!.type },
         body: selectedImage, 
       }).then(() => {
         window.location.href = `/gallery`

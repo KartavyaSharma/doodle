@@ -29,8 +29,8 @@ http.route({
         const storageId = await ctx.storage.store(blob);
 
         // Step 2: Save the storage ID to the database via a mutation
-        const author = new URL(request.url).searchParams.get("author");
-        await ctx.runMutation(api.messages.sendImage, { storageId, author });
+        const author = new URL(request.url).searchParams.get("author") as string;
+        await ctx.runMutation(api.functions.sendImage, { storageId, author });
 
         // Step 3: Return a response with the correct CORS headers
         return new Response(null, {
@@ -38,9 +38,11 @@ http.route({
             // CORS headers
             headers: new Headers({
                 // e.g. https://mywebsite.com
-                "Access-Control-Allow-Origin": process.env.CLIENT_ORIGIN!,
+                "Access-Control-Allow-Origin": "http://localhost:5173",
                 Vary: "origin",
             }),
         });
     }),
 });
+
+export default http;
