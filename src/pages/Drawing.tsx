@@ -160,7 +160,7 @@ export default function Drawing() {
       {
         start ? <div>{countdown}</div>
           :
-          <button onClick={startButtonHandler}>Start</button>
+          <button className='prompt-button' onClick={startButtonHandler}>Start</button>
       }
       {start && drawing ? (
         <div>
@@ -183,8 +183,8 @@ export default function Drawing() {
                 onClick={() => handleColorChange(color)}
               />
             ))}
-            <button onClick={handleDelete}>        <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
-            </button>
+            
+            <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
           </div>
         </div>
       ) : (
