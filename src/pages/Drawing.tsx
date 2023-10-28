@@ -38,9 +38,43 @@ const handleDelete = () => {
 
 
 export default function Drawing() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [colorChoice, setColorChoice] = useState(palette[0]);
+  const startDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+      setIsDrawing(true);
+
+      const ctx = e.currentTarget.getContext("2d");
+
+      if (ctx) {
+          const m = getMouse(e, canvasRef.current as HTMLCanvasElement);
+
+          ctx.beginPath();
+          ctx.lineWidth = 12;
+          ctx.lineCap = "round";
+          ctx.strokeStyle = colorChoice;
+          ctx.moveTo(m.x, m.y);
+        }
+  }
+
+  const draw: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+      if (!isDrawing) {
+          return;
+      }
+      const ctx = e.currentTarget.getContext("2d");
+
+      if (ctx) {
+          const m = getMouse(e, canvasRef.current as HTMLCanvasElement);
+
+          ctx.lineTo(m.x, m.y);
+          ctx.stroke();
+      }
+  }
+
+  const endDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+      setIsDrawing(false);
+  }
+
   const [start, setStart] = useState(false);
   const [drawing, setDrawing] = useState(true);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -101,45 +135,6 @@ export default function Drawing() {
     }
   }, [selectedImage])
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const startDrawing = (e: React.MouseEvent) => {
-      const m = getMouse(e, canvas);
-      ctx.beginPath();
-      ctx.moveTo(m.x, m.y);
-      setIsDrawing(true);
-    };
-
-    const draw = (e: React.MouseEvent) => {
-      if (!isDrawing) return;
-      const m = getMouse(e, canvas);
-      ctx.lineWidth = 12;
-      ctx.lineCap = "round";
-      ctx.strokeStyle = colorChoice;
-      ctx.lineTo(m.x, m.y);
-      ctx.stroke();
-    };
-
-    const endDrawing = () => {
-      setIsDrawing(false);
-    };
-
-    canvas.addEventListener('mousedown', startDrawing as any);
-    canvas.addEventListener('mousemove', draw as any);
-    canvas.addEventListener('mouseup', endDrawing as any);
-    canvas.addEventListener('mouseout', endDrawing as any);
-
-    return () => {
-      canvas.removeEventListener('mousedown', startDrawing as any);
-      canvas.removeEventListener('mousemove', draw as any);
-      canvas.removeEventListener('mouseup', endDrawing as any);
-      canvas.removeEventListener('mouseout', endDrawing as any);
-    };
-  }, [isDrawing, colorChoice]);
 
   const handleColorChange = (color: string) => {
     setColorChoice(color);
@@ -169,7 +164,16 @@ export default function Drawing() {
       }
       {start && drawing ? (
         <div>
-          <canvas ref={canvasRef} width={800} height={600}></canvas>
+          <canvas 
+            id="canvas" 
+            width={1024}
+            height={1024}
+
+            ref={canvasRef}
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={endDrawing}
+        />
           <div>
             {palette.map(color => (
               <div
