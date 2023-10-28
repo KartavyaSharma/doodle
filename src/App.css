@@ -43,6 +43,7 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #FFEED3!important;
 }
 
 .appContainer {
@@ -51,8 +52,4 @@ body, html {
 
 .title {
   font-size: 2em;
-}
-
-canvas {
-  max-width: 100%;
 }
