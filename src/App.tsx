@@ -5,6 +5,7 @@ import {Route, Routes} from "react-router-dom"
 import Drawing from './pages/Drawing';
 import Gallery from './pages/Gallery';
 import Live from './pages/Live';
+import Canvas from './pages/Canvas'
 
 function App() {
   

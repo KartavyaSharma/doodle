@@ -1,12 +1,23 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
+import './Canvas.css';
 
 const TIMEFORDRAWING = 5;
-const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage"
+const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage";
 const host = window.location.hostname;
 
+const palette = ["#BB803B", "#EF8D8D", "#F6EC90", "#A5F2A8", "#9DA7F9", "#D098EA"];
 
+function getMouse(e: React.MouseEvent, canvas: HTMLCanvasElement) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
 const colorClasses = [
   'color-brown',
   'color-red',
@@ -61,124 +72,87 @@ const Navbar = () => {
     </div>
   );
 };
-
-  
-
-
 export default function Drawing() {
-  const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [start, setStart] = useState(false);
-  const [drawingg, setDrawing] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [countdown, setCountDown] = useState(TIMEFORDRAWING)
-  
-  // Add modal state and functions
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [username, setUsername] = useState('');
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [isDrawing, setIsDrawing] = useState(false);
+    const [colorChoice, setColorChoice] = useState(palette[0]);
+    const [start, setStart] = useState(false);
+    const [drawing, setDrawing] = useState(true);
+    const [isMenuOpen, setMenuOpen] = useState(false);
+    const [modalIsOpen, setModalOpen] = useState(false);
+    const [countdown, setCountDown] = useState(TIMEFORDRAWING);
 
+    const startButtonHandler = () => {
+      setStart(true);
+    };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
- 
-  const submitForm = () => {
-    closeModal();
-    if (selectedImage) {
-      console.log("Sent Image with username:", username);
-      fetch(SEND_IMG_URL, {
-        method: "POST",
-        headers: { "Content-Type": selectedImage.type },
-        body: selectedImage, 
-      }).then(() => {
-        window.location.href = `/gallery`;
-      }).catch(() => {
-        window.location.href = `/gallery`;
-      });
-    }
-  };
-  
-  
-  
-  const startButtonHandler = () => {
-    setStart(true);
-  };
+        const startDrawing = (e: React.MouseEvent) => {
+            const m = getMouse(e, canvas);
+            ctx.beginPath();
+            ctx.moveTo(m.x, m.y);
+            setIsDrawing(true);
+        };
 
-  useEffect(() => {
-    if (start) {
-      const interval = setInterval(() => {
-        setCountDown(prev => prev - 1);
-      }, 1000);
+        const draw = (e: React.MouseEvent) => {
+            if (!isDrawing) return;
+            const m = getMouse(e, canvas);
+            ctx.lineWidth = 12;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = colorChoice;
+            ctx.lineTo(m.x, m.y);
+            ctx.stroke();
+        };
 
-      setTimeout(() => {
-        clearInterval(interval);
-        setDrawing(false);
-        canvasRef.current.toBlob((blob) => {
-          setSelectedImage(blob);
-        });
-      }, TIMEFORDRAWING * 1000); // Convert seconds to milliseconds
-    }
-  }, [start]);
+        const endDrawing = () => {
+            setIsDrawing(false);
+        };
 
-  useEffect(() => {
+        canvas.addEventListener('mousedown', startDrawing as any);
+        canvas.addEventListener('mousemove', draw as any);
+        canvas.addEventListener('mouseup', endDrawing as any);
+        canvas.addEventListener('mouseout', endDrawing as any);
 
-    if (selectedImage) {
-      openModal();
-    }
-  }, [selectedImage])
+        return () => {
+            canvas.removeEventListener('mousedown', startDrawing as any);
+            canvas.removeEventListener('mousemove', draw as any);
+            canvas.removeEventListener('mouseup', endDrawing as any);
+            canvas.removeEventListener('mouseout', endDrawing as any);
+        };
+    }, [isDrawing, colorChoice]);
 
-  useEffect(() => {
-    if (drawingg && start) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      let drawing = false;
+    const handleColorChange = (color: string) => {
+        setColorChoice(color);
+    };
 
-      const startDrawing = (e) => {
-        ctx.beginPath();
-        ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-        setIsDrawing(true);
-      };
+    const handleDelete = () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+        if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    };
 
-      const draw = (e) => {
-        if (!isDrawing) return;
-        ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-        ctx.stroke();
-      };
+    const toggleMenu = () => {
+        setMenuOpen(!isMenuOpen);
+    };
 
-      const stopDrawing = () => {
-        ctx.closePath();
-        setIsDrawing(false);
-      };
-
-      canvas.addEventListener('mousedown', startDrawing);
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('mouseup', stopDrawing);
-      canvas.addEventListener('mouseout', stopDrawing);
-
-      return () => {
-        canvas.removeEventListener('mousedown', startDrawing);
-        canvas.removeEventListener('mousemove', draw);
-        canvas.removeEventListener('mouseup', stopDrawing);
-        canvas.removeEventListener('mouseout', stopDrawing);
-      };
-    }
-  }, [isDrawing, drawingg, start]);
-
-  return (
-    <div className="appContainer">
-      <Navbar />
+    return (
+        <div className="appContainer">
+            <Navbar />
       <h1 className="title">Draw!</h1>
-      <h1>Instruction: bafdasfhudashfkdsf</h1>
+      <h1>Instruction: Draw a picture representing the prompt!</h1>
       {
         start ? <div>{countdown}</div>
         :
         <button onClick={startButtonHandler}>Start</button>
       }
-      {start && drawingg ? (
+      {start && drawing ? (
         <canvas
           ref={canvasRef}
           width={800}
@@ -189,34 +163,22 @@ export default function Drawing() {
         <></>
       )}
 
-
-      <div>
-        {colorClasses.map(colorClass => (
-          <div
-            key={colorClass}
-            className={`colorButton ${colorClass}`}
-            onClick={() => handleColorChange(colorClass)}
-          />
-        ))}
-
-        <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
-      </div>
-
-
-
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Username Modal"
-      >
-        <h2>Enter Your Username</h2>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button onClick={submitForm}>Submit</button>
-      </Modal>
-    </div>
-  ); 
+            <Modal isOpen={modalIsOpen}>
+                {/* Modal content */}
+            </Modal>
+            <canvas ref={canvasRef} width={800} height={600}></canvas>
+            <div>
+                {palette.map(color => (
+                    <div
+                        key={color}
+                        className="colorButton"
+                        style={{ backgroundColor: color }}
+                        onClick={() => handleColorChange(color)}
+                    />
+                ))}
+                <button onClick={handleDelete}>        <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
+</button>
+            </div>
+        </div>
+    );
 }

@@ -182,7 +182,7 @@ canvas {
 
 
 .color-brown {
-  background-color: #5C370A;
+  background-color: #BB803B;
 }
 
 .color-red {
@@ -212,4 +212,3 @@ canvas {
 .circle-button.selected {
   z-index: 2;
 }
-
