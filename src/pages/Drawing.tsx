@@ -1,10 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+
 // import './App.css';
 import Modal from 'react-modal';
 
 const TIMEFORDRAWING = 5;
-const SEND_IMG_URL = "https://descriptive-perch-312.convex.site/sendImage"
-const host = window.location.hostname
+const SEND_IMG_URL = import.meta.env.VITE_CONVEX_SITE_URL
+// const host = window.location.hostname
 
 export default function Drawing() {
   const canvasRef = useRef(null);
@@ -29,7 +30,7 @@ export default function Drawing() {
   const submitForm = () => {
     closeModal();
     if (selectedImage) {
-      fetch(SEND_IMG_URL+"?author="+username, {
+      fetch(SEND_IMG_URL+"/sendImage"+"?author="+username, {
         method: "POST",
         headers: { "Content-Type": selectedImage.type },
         body: selectedImage, 

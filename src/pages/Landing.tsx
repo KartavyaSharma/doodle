@@ -1,5 +1,5 @@
-import React from 'react'
-const host = window.location.hostname
+// import React from 'react'
+// const host = window.location.hostname
 
 export default function Landing() {
   return (
