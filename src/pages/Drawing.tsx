@@ -1,10 +1,69 @@
 import React, { useRef, useEffect, useState } from 'react';
-// import './App.css';
+import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 
 const TIMEFORDRAWING = 5;
 const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage"
-const host = window.location.hostname
+const host = window.location.hostname;
+
+
+const colorClasses = [
+  'color-brown',
+  'color-red',
+  'color-yellow',
+  'color-green',
+  'color-blue',
+  'color-purple'
+];
+
+const handleColorChange = (colorClass) => {
+  // Handle color change logic here. This is a placeholder.
+  console.log(`Color changed to ${colorClass}`);
+};
+
+const handleDelete = () => {
+  // Handle the delete logic here. This is a placeholder.
+  console.log("Delete button clicked");
+};
+
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(prevState => !prevState);
+  };
+
+  return (
+    <div id="mainNavbar">
+      <nav className="navbar navbar-dark">
+        <div className="navbar-container">
+          <div className="navbar-brand">
+            <img src="./logo.svg" alt="Logo" className="small-logo" />
+          </div>
+          
+          <img src={isMenuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" className="navbar-hamburger" onClick={toggleMenu} />
+
+        </div>
+      </nav>
+
+      {isMenuOpen && (
+        <div className="navbar-collapse">
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <Link to="/gallery" className="nav-link" onClick={toggleMenu}>Gallery</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/live" className="nav-link" onClick={toggleMenu}>Live</Link>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+  
+
 
 export default function Drawing() {
   const canvasRef = useRef(null);
@@ -14,9 +73,10 @@ export default function Drawing() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [countdown, setCountDown] = useState(TIMEFORDRAWING)
   
-   // Add modal state and functions
+  // Add modal state and functions
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [username, setUsername] = useState('');
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -110,6 +170,7 @@ export default function Drawing() {
 
   return (
     <div className="appContainer">
+      <Navbar />
       <h1 className="title">Draw!</h1>
       <h1>Instruction: bafdasfhudashfkdsf</h1>
       {
@@ -128,7 +189,22 @@ export default function Drawing() {
         <></>
       )}
 
-    <Modal
+
+      <div>
+        {colorClasses.map(colorClass => (
+          <div
+            key={colorClass}
+            className={`colorButton ${colorClass}`}
+            onClick={() => handleColorChange(colorClass)}
+          />
+        ))}
+
+        <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
+      </div>
+
+
+
+      <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Username Modal"

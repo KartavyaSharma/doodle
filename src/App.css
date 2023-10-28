@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 .App {
   text-align: center;
 }
@@ -38,11 +39,24 @@
 }
 
 body, html {
+  font-family: 'Inter', sans-serif;
   margin: 0;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #FFEED3;
+  font-family: 'Inter';
+  font-size: 22px;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+.text {
+  color: #5C370A;
 }
 
 .appContainer {
@@ -56,3 +70,146 @@ body, html {
 canvas {
   max-width: 100%;
 }
+
+
+/* Navbar */
+.navbar-logo {
+  height: 5vh;
+}
+
+.navbar-hamburger {
+  height: 2vh;
+  cursor: pointer;
+}
+
+.navbar {
+  background-color: #FFEED3;
+}
+.navbar {
+  background-color: #FFEED3;
+  width: 100%; /* make sure it takes full width */
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.navbar-collapse {
+  width: 100%;
+  background-color: #FFEED3; /* updated color */
+  position: absolute;
+  top: 100%; /* positions it directly under the navbar */
+  left: 0; /* aligns it to the left edge of the navbar */
+  z-index: 10; /* ensures it overlays content below */
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* ensure it's column */
+  align-items: flex-start; /* aligns items to the left */
+  width: 100%;
+}
+
+.nav-item {
+  border-top: 0.5px solid rgba(255,238,211, 0.6); /* Adjusted color for better visibility */
+  border-bottom: 0.5px solid rgba(255,238,211, 0.6); /* Adjusted color for better visibility */
+  width: 100%;
+  text-align: left; /* aligned to the left */
+}
+
+.nav-link {
+  display: block;
+  padding: 15px 20px;
+  text-decoration: none;
+  background-color: #FFEED3;
+  color: #5C370A;
+  width: 100%;
+  text-align: left; /* aligned to the left */
+}
+
+.nav-link:hover {
+  background-color: rgba(255,238,211, 0.6); /* Adjusted for better visibility */
+}
+#mainNavbar .navbar-collapse {
+  position: absolute;
+  top: 100%; /* positions it directly under the navbar */
+  left: 0; /* aligns it to the left edge of the navbar */
+  z-index: 1000; /* ensures it overlays content below */
+}
+#mainNavbar .navbar-collapse {
+  box-shadow: 0px 8px 16px 0px rgba(255,238,211,0.6); 
+}
+
+#mainNavbar {
+  position: fixed; /* Fixed positioning makes it stick to the top regardless of scrolling */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* This ensures the navbar stays above other elements on the page */
+}
+
+.navbar-collapse {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #5C370A;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* optional for a subtle shadow effect */
+}
+
+
+/* Drawing Colora */
+.colorButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 5px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.deleteButton {
+  display: block;
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+
+.color-brown {
+  background-color: #5C370A;
+}
+
+.color-red {
+  background-color: #EF8D8D;
+}
+
+.color-yellow {
+  background-color: #F6EC90;
+}
+
+.color-green {
+  background-color: #A5F2A8;
+}
+
+.color-blue {
+  background-color: #9DA7F9;
+}
+
+.color-purple {
+  background-color: #D098EA;
+}
+
+.circle-button {
+  z-index: 1;
+}
+
+.circle-button.selected {
+  z-index: 2;
+}
+
