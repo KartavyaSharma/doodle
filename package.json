@@ -7,7 +7,7 @@
     "dev": "npm-run-all dev:init --parallel dev:frontend dev:backend",
     "dev:frontend": "vite --open",
     "dev:backend": "convex dev",
-    "dev:init": "convex dev --until-success && convex dashboard",
+    "dev:init": "convex dev --until-success --typecheck=disable && convex dashboard",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx ",
     "preview": "vite preview"

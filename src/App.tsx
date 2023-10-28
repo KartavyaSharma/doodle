@@ -1,100 +1,94 @@
-import { useAction, useMutation, useQuery } from "convex/react"
-import { api } from "../convex/_generated/api"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+import React, { useRef, useEffect, useState } from 'react';
+// import './App.css';
 
+const TIMEFORDRAWING = 5;
+const SEND_IMG_URL = ""
 function App() {
-  const [newIdea, setNewIdea] = useState("")
-  const [includeRandom, setIncludeRandom] = useState(true)
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [start, setStart] = useState(false);
+  const [drawingg, setDrawing] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const startButtonHandler = () => {
+    setStart(true);
+  };
 
-  const ideas = useQuery(api.myFunctions.listIdeas)
-  const saveIdea = useMutation(api.myFunctions.saveIdea)
-  const generateIdea = useAction(api.myFunctions.fetchRandomIdea)
+  useEffect(() => {
+    if (start) {
+      setTimeout(() => {
+        setDrawing(false);
+        canvasRef.current.toBlob((blob) => {
+          setSelectedImage(blob);
+        });
+      }, TIMEFORDRAWING * 1000); // Convert seconds to milliseconds
+    }
+  }, [start]);
+
+  useEffect(() => {
+
+    if (selectedImage) {
+      console.log("Sent Image")
+      fetch(SEND_IMG_URL, {
+        method: "POST",
+        headers: { "Content-Type": selectedImage.type },
+        body: selectedImage, 
+      })
+    }
+  }, [selectedImage])
+
+  useEffect(() => {
+    if (drawingg && start) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      let drawing = false;
+
+      const startDrawing = (e) => {
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        setIsDrawing(true);
+      };
+
+      const draw = (e) => {
+        if (!isDrawing) return;
+        ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        ctx.stroke();
+      };
+
+      const stopDrawing = () => {
+        ctx.closePath();
+        setIsDrawing(false);
+      };
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+
+      return () => {
+        canvas.removeEventListener('mousedown', startDrawing);
+        canvas.removeEventListener('mousemove', draw);
+        canvas.removeEventListener('mouseup', stopDrawing);
+        canvas.removeEventListener('mouseout', stopDrawing);
+      };
+    }
+  }, [isDrawing, drawingg, start]);
 
   return (
-    <>
-      <main className="container max-w-2xl flex flex-col gap-8">
-        <h1 className="text-3xl font-extrabold mt-8 text-center">
-          Get hacking with Convex
-        </h1>
-
-        <h2 className="text-center">Let's brainstorm apps to build!</h2>
-
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            value={newIdea}
-            onChange={(event) => setNewIdea(event.target.value)}
-            placeholder="Type your app idea here"
-          />
-          <Button
-            disabled={!newIdea}
-            title={
-              newIdea
-                ? "Save your idea to the database"
-                : "You must enter an idea first"
-            }
-            onClick={async () => {
-              await saveIdea({ idea: newIdea.trim(), random: false })
-              setNewIdea("")
-            }}
-            className="min-w-fit"
-          >
-            Save idea
-          </Button>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <Button
-            onClick={async () => {
-              await generateIdea()
-            }}
-            title="Save a randomly generated app idea to the database"
-          >
-            Generate a random app idea
-          </Button>
-
-          <div
-            className="flex gap-2"
-            title="Uh oh, this checkbox doesn't work! Until we fix it ;)"
-          >
-            <Checkbox
-              id="show-random"
-              checked={includeRandom}
-              onCheckedChange={() => setIncludeRandom(!includeRandom)}
-            />
-            <Label htmlFor="show-random">Include random ideas</Label>
-          </div>
-        </div>
-
-        <ul>
-          {ideas?.map((document, i) => (
-            <li key={i}>
-              {document.random ? "🤖 " : "💡 "}
-              {document.idea}
-            </li>
-          ))}
-        </ul>
-      </main>
-      <footer className="text-center text-xs mb-5 mt-10 w-full">
-        <p>
-          Built with <a href="https://convex.dev">Convex</a>,{" "}
-          <a href="https://www.typescriptlang.org">TypeScript</a>,{" "}
-          <a href="https://react.dev">React</a>, and{" "}
-          <a href="https://vitejs.dev">Vite</a>
-        </p>
-        <p>
-          Random app ideas thanks to{" "}
-          <a target="_blank" href="https://appideagenerator.com/">
-            appideagenerator.com
-          </a>
-        </p>
-      </footer>
-    </>
-  )
+    <div className="appContainer">
+      <h1 className="title">Draw!</h1>
+      <button onClick={startButtonHandler}>Start</button>
+      {start && drawingg ? (
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          style={{ border: '1px solid black' }}
+        />
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
