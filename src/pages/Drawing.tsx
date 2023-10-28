@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 // import './App.css';
+import Modal from 'react-modal';
 
 const TIMEFORDRAWING = 5;
 const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage"
@@ -11,13 +12,50 @@ export default function Drawing() {
   const [start, setStart] = useState(false);
   const [drawingg, setDrawing] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [countdown, setCountDown] = useState(TIMEFORDRAWING)
+  
+   // Add modal state and functions
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+ 
+  const submitForm = () => {
+    closeModal();
+    if (selectedImage) {
+      console.log("Sent Image with username:", username);
+      fetch(SEND_IMG_URL, {
+        method: "POST",
+        headers: { "Content-Type": selectedImage.type },
+        body: selectedImage, 
+      }).then(() => {
+        window.location.href = `/gallery`;
+      }).catch(() => {
+        window.location.href = `/gallery`;
+      });
+    }
+  };
+  
+  
+  
   const startButtonHandler = () => {
     setStart(true);
   };
 
   useEffect(() => {
     if (start) {
+      const interval = setInterval(() => {
+        setCountDown(prev => prev - 1);
+      }, 1000);
+
       setTimeout(() => {
+        clearInterval(interval);
         setDrawing(false);
         canvasRef.current.toBlob((blob) => {
           setSelectedImage(blob);
@@ -29,14 +67,7 @@ export default function Drawing() {
   useEffect(() => {
 
     if (selectedImage) {
-      console.log("Sent Image")
-      fetch(SEND_IMG_URL, {
-        method: "POST",
-        headers: { "Content-Type": selectedImage!.type },
-        body: selectedImage, 
-      }).then(() => {
-        window.location.href = `/gallery`
-      })
+      openModal();
     }
   }, [selectedImage])
 
@@ -80,7 +111,12 @@ export default function Drawing() {
   return (
     <div className="appContainer">
       <h1 className="title">Draw!</h1>
-      <button onClick={startButtonHandler}>Start</button>
+      <h1>Instruction: bafdasfhudashfkdsf</h1>
+      {
+        start ? <div>{countdown}</div>
+        :
+        <button onClick={startButtonHandler}>Start</button>
+      }
       {start && drawingg ? (
         <canvas
           ref={canvasRef}
@@ -91,6 +127,20 @@ export default function Drawing() {
       ) : (
         <></>
       )}
+
+    <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Username Modal"
+      >
+        <h2>Enter Your Username</h2>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button onClick={submitForm}>Submit</button>
+      </Modal>
     </div>
   ); 
 }
