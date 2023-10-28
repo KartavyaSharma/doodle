@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
-import './Canvas.css';
+import './Drawing.css';
 
 const TIMEFORDRAWING = 5;
 const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage";
@@ -37,41 +36,7 @@ const handleDelete = () => {
   console.log("Delete button clicked");
 };
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(prevState => !prevState);
-  };
-
-  return (
-    <div id="mainNavbar">
-      <nav className="navbar navbar-dark">
-        <div className="navbar-container">
-          <div className="navbar-brand">
-            <img src="./logo.svg" alt="Logo" className="small-logo" />
-          </div>
-          
-          <img src={isMenuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" className="navbar-hamburger" onClick={toggleMenu} />
-
-        </div>
-      </nav>
-
-      {isMenuOpen && (
-        <div className="navbar-collapse">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/gallery" className="nav-link" onClick={toggleMenu}>Gallery</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/live" className="nav-link" onClick={toggleMenu}>Live</Link>
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
 export default function Drawing() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -80,7 +45,30 @@ export default function Drawing() {
     const [drawing, setDrawing] = useState(true);
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [modalIsOpen, setModalOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [countdown, setCountDown] = useState(TIMEFORDRAWING);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [username, setUsername] = useState('');
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
+    const submitForm = () => {
+      closeModal();
+      if (selectedImage) {
+        fetch(SEND_IMG_URL+"/sendImage"+"?author="+username, {
+          method: "POST",
+          headers: { "Content-Type": selectedImage.type },
+          body: selectedImage, 
+        }).then(() => {
+          console.log("Sent Image with username:", username);
+          window.location.href = `/gallery`;
+        }).catch(() => {
+          // window.location.href = `/gallery`;
+        });
+      }
+    };
 
     const startButtonHandler = () => {
       setStart(true);
@@ -144,7 +132,7 @@ export default function Drawing() {
 
     return (
         <div className="appContainer">
-            <Navbar />
+            
       <h1 className="title">Draw!</h1>
       <h1>Instruction: Draw a picture representing the prompt!</h1>
       {
@@ -153,20 +141,8 @@ export default function Drawing() {
         <button onClick={startButtonHandler}>Start</button>
       }
       {start && drawing ? (
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          style={{ border: '1px solid black' }}
-        />
-      ) : (
-        <></>
-      )}
-
-            <Modal isOpen={modalIsOpen}>
-                {/* Modal content */}
-            </Modal>
-            <canvas ref={canvasRef} width={800} height={600}></canvas>
+        <div>
+          <canvas ref={canvasRef} width={800} height={600}></canvas>
             <div>
                 {palette.map(color => (
                     <div
@@ -179,6 +155,24 @@ export default function Drawing() {
                 <button onClick={handleDelete}>        <img src="./delete.svg" alt="Delete" className="deleteButton" onClick={handleDelete} />
 </button>
             </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+            <Modal isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            contentLabel="Username Modal"
+            >
+              <h2>Enter Your Username</h2>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <button onClick={submitForm}>Submit</button>
+            </Modal>
+
         </div>
     );
 }
