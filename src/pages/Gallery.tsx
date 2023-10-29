@@ -86,6 +86,7 @@ export default function Gallery() {
       console.log("swiped");
       setCurrentIndex(prevIndex => (prevIndex + 1) % results.length);  // Increment and wrap around
     }
+    
   
     return (
         <>
