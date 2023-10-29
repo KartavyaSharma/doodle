@@ -79,25 +79,29 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 }
 
 export default function Gallery() {
-  const client = useConvex()
-  const [drawings, setDrawings] = useState<any[]>([])
-  const { results, status, loadMore } = usePaginatedQuery(
-    api.functions.list,
-    {},
-    { initialNumItems: 3 }
-  );
-  //initial
-  useEffect(() => {
-    setDrawings([...drawings ,...results])
-  }, [results])
+    const { results, status, loadMore } = usePaginatedQuery(api.functions.list, {}, { initialNumItems: 5 });
+    const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
 
-  const nextDrawing = () => loadMore(1)
+    function* infiniteLoop(arr) {
+        while (true) {
+            for (let item of arr) {
+                yield item;
+            }
+        }
+    }
 
-  return (
-    <>
-    {drawings.reverse().map((doodle, index) => (
-      <Drawing key={doodle.url} url={doodle.url} draggable={index == drawings.length - 1} swiped={nextDrawing} />
-    ))}
-    </>
-  )
+    const infiniteDrawings = infiniteLoop(results);
+
+    const nextDrawing = () => {
+      console.log("swiped");
+      setCurrentIndex(prevIndex => (prevIndex + 1) % results.length);  // Increment and wrap around
+    }
+  
+    return (
+      <>
+        <Drawing key={currentIndex + 2} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+        <Drawing key={currentIndex + 1} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+        <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
+      </>
+    )
 }

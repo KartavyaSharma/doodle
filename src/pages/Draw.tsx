@@ -100,7 +100,7 @@ export default function Drawing() {
         body: selectedImage,
       }).then(() => {
         console.log("Sent Image with username:", username);
-        // window.location.href = `/gallery`;
+        window.location.href = `/gallery`;
       }).catch(() => {
         // window.location.href = `/gallery`;
       });
@@ -191,19 +191,27 @@ export default function Drawing() {
         <></>
       )}
 
-      <Modal isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Username Modal"
-      >
-        <h2>Enter Your Username</h2>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button onClick={submitForm}>Submit</button>
-      </Modal>
-
+<Modal isOpen={isModalOpen}
+       onRequestClose={closeModal}
+       contentLabel="Username Modal"
+       overlayClassName="modal-overlay"
+       className="modal-content"
+>
+  <center>
+    <h2 className="text">Time's up!</h2>
+    <p className="text">Please enter a username to submit.</p>
+    <input
+      type="text"
+      defaultValue="username"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
+    <br />
+    <br />
+    <button className='prompt-button' onClick={submitForm}>Submit!</button>
+  </center>
+</Modal>
+    
     </div>
   );
 }
