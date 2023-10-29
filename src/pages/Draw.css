@@ -18,7 +18,7 @@
     border: 3px solid #5C370A;
     border-radius: 10px;
     background-color: #ffffff;
-    margin: 20px;
+    margin: 20px 32px;
 
     display: flex;
     flex-direction: column;
