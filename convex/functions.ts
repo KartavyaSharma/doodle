@@ -18,12 +18,23 @@ export const sendImage = mutation({
 // Get image storageId from database
 export const list = query({
     args: {
-        paginationOpts: paginationOptsValidator
+        paginationOpts: v.optional(paginationOptsValidator)
     },
     handler: async (ctx, args) => {
-        let doodles: PaginationResult | ;
+        let doodles;
         if (args.paginationOpts){
             doodles = await ctx.db.query("doodles").paginate(args.paginationOpts) 
+
+            for (let i = 0 ; i < doodles.page.length; i++){
+                doodles.page[i] = {
+                    ...doodles.page[i],
+                    // If the doodle is an "image", its `body` is a `StorageId`
+                    ...(doodles.page[i].format === "image"
+                        ? { url: await ctx.storage.getUrl(doodles.page[i].body) }
+                        : {}),
+                }
+            }
+            return doodles
         } else {
             doodles = await ctx.db.query("doodles").collect();
         }
