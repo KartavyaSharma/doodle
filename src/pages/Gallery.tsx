@@ -1,5 +1,5 @@
 
-import { useConvex } from 'convex/react'
+import { useConvex, usePaginatedQuery } from 'convex/react'
 import { useEffect, useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import "./Gallery.css"
@@ -81,22 +81,17 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 export default function Gallery() {
   const client = useConvex()
   const [drawings, setDrawings] = useState<any[]>([])
-
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.functions.list,
+    {},
+    { initialNumItems: 3 }
+  );
   //initial
   useEffect(() => {
-    client.query(api.functions.list, {limit: 3})
-        .then((result) => {
-          setDrawings(result)
-        })
-  }, [])
+    setDrawings([...drawings ,...results])
+  }, [results])
 
-  const nextDrawing = () => {
-    client.query(api.functions.list, {limit: 1})
-        .then((result) => {
-          setDrawings([...drawings.slice(1), ...result])
-          console.log(drawings)
-        })
-  }
+  const nextDrawing = () => loadMore(1)
 
   return (
     <>

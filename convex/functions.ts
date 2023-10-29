@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 import { query, mutation, action } from "./_generated/server"
 import { api } from "./_generated/api"
+import { PaginationResult, paginationOptsValidator } from "convex/server"
 
 // Mutation to store image object id in database
 export const sendImage = mutation({
@@ -16,12 +17,13 @@ export const sendImage = mutation({
 
 // Get image storageId from database
 export const list = query({
-    args: {limit:v.optional(v.number())},
+    args: {
+        paginationOpts: paginationOptsValidator
+    },
     handler: async (ctx, args) => {
-        let doodles;
-        if (args.limit){
-            console.log("limit", args.limit)
-            doodles = await ctx.db.query("doodles").take(args.limit);
+        let doodles: PaginationResult | ;
+        if (args.paginationOpts){
+            doodles = await ctx.db.query("doodles").paginate(args.paginationOpts) 
         } else {
             doodles = await ctx.db.query("doodles").collect();
         }
