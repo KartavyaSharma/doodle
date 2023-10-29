@@ -78,8 +78,12 @@ canvas {
 }
 
 .navbar-hamburger {
+  width: 2vw;
   height: 2vh;
   cursor: pointer;
+  padding-right: 55px;
+  padding-bottom: 25px;
+  padding-top: 10px;
 }
 
 .navbar {
@@ -153,7 +157,6 @@ canvas {
   left: 0;
   right: 0;
   z-index: 1000; /* This ensures the navbar stays above other elements on the page */
-  padding-right: 3vw;
 }
 
 .navbar-collapse {
@@ -217,19 +220,21 @@ canvas {
 
 /* Button */
 .prompt-button {
-  background: linear-gradient(145deg, #f5d8ba, #ebc092);
-  border: none;
+  background-color: #FFEED3;
+  border-color: #5C370A;
+  /* border-bottom: 10px solid; */
   border-radius: 20px;
   padding: 10px 20px;
   font-family: 'Arial', sans-serif; /* Adjust to the font you want */
   font-size: 18px;
   font-weight: bold;
-  color: #5a4a42;
+  color: #5C370A;
   cursor: pointer;
   outline: none;
-  box-shadow: 5px 5px 15px #d4b48c, -5px -5px 15px #ffe4c6; /* Gives the 3D appearance */
+  box-shadow: 0px 5px #5C370A; /* Gives the 3D appearance */
   transition: transform 0.2s;
 }
+
 
 .prompt-button:hover {
   transform: translateY(-2px);

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import './Drawing.css';
+import './Draw.css';
 
 const TIMEFORDRAWING = 5;
 const SEND_IMG_URL = import.meta.env.VITE_CONVEX_SITE_URL;
@@ -160,7 +160,7 @@ export default function Drawing() {
       {
         start ? <div>{countdown}</div>
           :
-          <button className='prompt-button' onClick={startButtonHandler}>Start</button>
+          <button className='prompt-button' onClick={startButtonHandler}>draw!</button>
       }
       {start && drawing ? (
         <div>
@@ -172,7 +172,8 @@ export default function Drawing() {
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={endDrawing}
-        />
+        >
+          </canvas>
           <div>
             {palette.map(color => (
               <div

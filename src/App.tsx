@@ -3,7 +3,7 @@ import './App.css';
 import {Route, Routes} from "react-router-dom"
 import { Link } from 'react-router-dom';
 
-import Drawing from './pages/Drawing';
+import Drawing from './pages/Draw';
 import Gallery from './pages/Gallery';
 import Live from './pages/Live';
 
@@ -22,7 +22,9 @@ const Navbar = () => {
             <img src="./logo.svg" alt="Logo" className="small-logo" />
           </div>
           
-          <img src={isMenuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" className="navbar-hamburger" onClick={toggleMenu} />
+          <div className="navbar-hamburger">
+            <img src={isMenuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" onClick={toggleMenu} className="small-logo" />
+          </div>
 
         </div>
       </nav>
