@@ -193,3 +193,14 @@
 .redBorder {
     border-color: #EF8D8D!important;
 }
+
+
+.logo-with-text {
+    display: flex;
+    align-items: center;
+}
+
+.logo-in-text {
+    height: 5vh;
+    margin-left: 1vw;
+}

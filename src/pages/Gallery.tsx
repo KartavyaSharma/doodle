@@ -79,7 +79,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 }
 
 export default function Gallery() {
-    const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 5 });
+    const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 20 });
     const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
 
     const nextDrawing = () => {
