@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
-import {Route, Routes} from "react-router-dom"
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Drawing from './pages/Draw';
 import Gallery from './pages/Gallery';
@@ -11,7 +11,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(prevState => !prevState);
+    setIsMenuOpen((prevState) => !prevState);
   };
 
   return (
@@ -33,10 +33,14 @@ const Navbar = () => {
         <div className="navbar-collapse">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to="/gallery" className="nav-link" onClick={toggleMenu}>Gallery</Link>
+              <Link to="/gallery" className="nav-link" onClick={toggleMenu}>
+                Gallery
+              </Link>
             </li>
             <li className="nav-item">
-              <Link to="/live" className="nav-link" onClick={toggleMenu}>Live</Link>
+              <Link to="/live" className="nav-link" onClick={toggleMenu}>
+                Live
+              </Link>
             </li>
           </ul>
         </div>
@@ -46,14 +50,13 @@ const Navbar = () => {
 };
 
 function App() {
-  
   return (
     <div>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Drawing/>} />
-        <Route path="/live" element={<Live/>} />
-        <Route path="/gallery" element={<Gallery/>} />
+        <Route path="/" element={<Drawing />} />
+        <Route path="/live" element={<Live />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
     </div>
   );
