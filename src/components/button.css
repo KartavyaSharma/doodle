@@ -5,6 +5,10 @@
     box-shadow: 0px 6px #5C370A;
 
     padding: 10px 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button-default {

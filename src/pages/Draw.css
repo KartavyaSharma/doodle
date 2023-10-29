@@ -94,12 +94,12 @@
 }
 
 #drawLogo {
-    height: 30px;
+    height: 28px;
 }
 
 #drawPrompt {
     margin-top: -8px;
-    font-size: 24px;
+    font-size: 28px;
 }
 
 #drawCountdown {
@@ -122,34 +122,46 @@
     align-items: center;
 }
 
-.colorButton {
+.colors {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
+.colorButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid #5C370A;
+    box-shadow: 0px 10px #5C370A;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: -20px;
+
+    transition: all 0.1s ease-in-out;
 }
 
 .colorButtonSelected {
-
+    margin-top: 0;
+    box-shadow: 0px 0px #5C370A;
 }
 
-.color-brown {
-
+.closeModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
 }
 
-.color-red {
-
+.closeOptions {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.color-yellow {
-
-}
-
-.color-green {
-
-}
-
-.color-blue {
-
-}
-
-.color-purple {
-
+.closeOptions button {
+    width: 75px;
+    height: 75px;
 }
