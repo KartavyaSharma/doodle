@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 // import DesktopFeed from "../components/DesktopFeed";
 import "../App.css";
-import "./Live.css"
+import "./Live.css";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 const QR_IMAGE_PATH = "src/assets/qr-sample.png";
 
+const maxAngle = 8;
+
 function Live() {
   const [showResults, setShowResults] = useState(false);
   const images = useQuery(api.functions.list, {});
+  const [initialAngle, _] = useState(
+    () => Math.random() * (maxAngle * 2) - maxAngle
+  );
+  let [angle, setAngle] = useState(initialAngle);
 
   const handleShowResults = () => {
     setShowResults(true);
@@ -28,7 +34,7 @@ function Live() {
   const fadeInProps = useSpring({
     opacity: showResults ? 1 : 0,
     display: showResults ? "block" : "none",
-    config: { duration: 500 },
+    config: { duration: 1000 },
   });
 
   return (
@@ -65,21 +71,32 @@ function Live() {
       <animated.div style={fadeInProps}>
         <div className="appContainer">
           <div className="super-parent">
-            <div className="parent">
+            <div className="parent-feed-maximized">
               <div className="results-grid">
                 {Array.isArray(images) &&
                   images[0]?.url &&
-                  images.map((image) => (
-                    <div className="drawing-container result-item">
-                      <img
-                        className="drawing"
-                        key={image._id}
-                        src={image.url}
-                        alt="Sample"
-                      />
-                      {/* <img className="drawing" src={props.url} alt="drawing" /> */}
-                    </div>
-                  ))}
+                  images.map((image) => {
+                    // setAngle(Math.random() * (maxAngle * 2) - maxAngle);
+                    angle = Math.random() * (maxAngle * 2) - maxAngle;
+                    return (
+                      <div
+                        className="drawing-container-live"
+                        style={{
+                          transform: `rotate(` + angle + "deg)",
+                        }}
+                      >
+                        <div style={{display: "flex", flexDirection: "column"}}>
+                          <img
+                            className="drawing-live drawing-image"
+                            key={image._id}
+                            src={image.url}
+                            alt="Sample"
+                          />
+                          <div style={{padding: "5px"}}>{image.author}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
