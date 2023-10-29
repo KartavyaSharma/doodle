@@ -38,12 +38,12 @@ export default function Drawing() {
   const [username, setUsername] = useState('');
   const [needUsername, setNeedUsername] = useState(false);
   
-  const startDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+  const startDrawing = (e: any) => {
       if (currentSection != PageSection.Draw) return;
 
       setIsDrawing(true);
 
-      const ctx = e.currentTarget.getContext("2d");
+      const ctx = canvasRef.current?.getContext("2d");
 
       if (ctx) {
           const m = getMouse(e, canvasRef.current as HTMLCanvasElement);
@@ -56,11 +56,11 @@ export default function Drawing() {
         }
   }
 
-  const draw: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+  const draw = (e: any) => {
       if (!isDrawing) {
           return;
       }
-      const ctx = e.currentTarget.getContext("2d");
+      const ctx = canvasRef.current?.getContext("2d");
 
       if (ctx) {
           const m = getMouse(e, canvasRef.current as HTMLCanvasElement);
@@ -70,7 +70,7 @@ export default function Drawing() {
       }
   }
 
-  const endDrawing: React.MouseEventHandler<HTMLCanvasElement> = (_) => {
+  const endDrawing = () => {
       setIsDrawing(false);
   }
 
@@ -200,6 +200,9 @@ export default function Drawing() {
               onMouseDown={startDrawing}
               onMouseMove={draw}
               onMouseUp={endDrawing}
+              onTouchStart={(e) => startDrawing(e.touches[0])}
+              onTouchMove={(e) => draw(e.touches[0])}
+              onTouchEnd={endDrawing}
             />
           }
 
