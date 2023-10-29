@@ -54,7 +54,7 @@ function Live() {
                 </div>
               </div>
               <div className={`column-40`}>
-                <img src={QR_IMAGE_PATH} alt="QR Image" />
+                <img src="./qr-sample.png" alt="QR Image" />
               </div>
             </div>
             <div className="button-container">
