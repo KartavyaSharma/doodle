@@ -49,7 +49,7 @@ function Live() {
                   <div className="live-normal">
                     Or visit&nbsp;
                     <br />
-                    <span className="live-link">bit.ly/example</span>
+                    <span className="live-link">bit.ly/prompt-doodle</span>
                   </div>
                 </div>
               </div>
@@ -72,6 +72,21 @@ function Live() {
         <div className="appContainer">
           <div className="super-parent">
             <div className="parent-feed-maximized">
+              <div className="column-1-maximized text">
+                <div className="live-text-maximized">
+                  <div className="live-large-feed-maximized">
+                    Scan to start drawing!
+                  </div>
+                  <div className="live-normal-feed-maximized">
+                    Or visit&nbsp;
+                    <br />
+                    <span className="live-link">bit.ly/prompt-doodle</span>
+                  </div>
+                </div>
+                <div className="qr-maximized">
+                  <img src={QR_IMAGE_PATH} alt="QR Image" />
+                </div>
+              </div>
               <div className="results-grid">
                 {Array.isArray(images) &&
                   images[0]?.url &&
@@ -85,14 +100,16 @@ function Live() {
                           transform: `rotate(` + angle + "deg)",
                         }}
                       >
-                        <div style={{display: "flex", flexDirection: "column"}}>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
                           <img
                             className="drawing-live drawing-image"
                             key={image._id}
                             src={image.url}
                             alt="Sample"
                           />
-                          <div style={{padding: "5px"}}>{image.author}</div>
+                          <div style={{ padding: "5px" }}>{image.author}</div>
                         </div>
                       </div>
                     );
