@@ -87,6 +87,8 @@ function Live() {
                   <img src={QR_IMAGE_PATH} alt="QR Image" />
                 </div>
               </div>
+              <div style={{display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "flex-end"}}>
+                <div style={{display: "flex", paddingTop: "50px", paddingRight: "80px", fontWeight: "bolder", fontSize: "45px"}}>Prompt: "An air fryer"</div>
               <div className="results-grid">
                 {Array.isArray(images) &&
                   images[0]?.url &&
@@ -114,6 +116,7 @@ function Live() {
                       </div>
                     );
                   })}
+              </div>
               </div>
             </div>
           </div>
