@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import './Drawing.css';
 
 const TIMEFORDRAWING = 5;
-const SEND_IMG_URL = "https://helpful-hornet-86.convex.site/sendImage";
+const SEND_IMG_URL = import.meta.env.VITE_CONVEX_SITE_URL;
 const host = window.location.hostname;
 
 const palette = ["#BB803B", "#EF8D8D", "#F6EC90", "#A5F2A8", "#9DA7F9", "#D098EA"];
@@ -78,7 +78,6 @@ export default function Drawing() {
   const [start, setStart] = useState(false);
   const [drawing, setDrawing] = useState(true);
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [modalIsOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [countdown, setCountDown] = useState(TIMEFORDRAWING);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,7 +100,7 @@ export default function Drawing() {
         body: selectedImage,
       }).then(() => {
         console.log("Sent Image with username:", username);
-        window.location.href = `/gallery`;
+        // window.location.href = `/gallery`;
       }).catch(() => {
         // window.location.href = `/gallery`;
       });
@@ -133,6 +132,7 @@ export default function Drawing() {
     if (selectedImage) {
       openModal();
     }
+    console.log(selectedImage, "!!!!!!!!");
   }, [selectedImage])
 
 
@@ -168,7 +168,6 @@ export default function Drawing() {
             id="canvas" 
             width={1024}
             height={1024}
-
             ref={canvasRef}
             onMouseDown={startDrawing}
             onMouseMove={draw}
@@ -191,7 +190,7 @@ export default function Drawing() {
         <></>
       )}
 
-      <Modal isOpen={modalIsOpen}
+      <Modal isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Username Modal"
       >

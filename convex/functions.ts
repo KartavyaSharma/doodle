@@ -20,6 +20,7 @@ export const list = query({
     handler: async (ctx, args) => {
         let doodles;
         if (args.limit){
+            console.log("limit", args.limit)
             doodles = await ctx.db.query("doodles").take(args.limit);
         } else {
             doodles = await ctx.db.query("doodles").collect();
