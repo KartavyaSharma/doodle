@@ -1,27 +1,33 @@
 import React, { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 // import DesktopFeed from "../components/DesktopFeed";
-import "../App.css"
+import "../App.css";
+import "./Live.css"
 import { useQuery } from "convex/react";
-import { api } from '../../convex/_generated/api'
+import { api } from "../../convex/_generated/api";
 const QR_IMAGE_PATH = "src/assets/qr-sample.png";
 
 function Live() {
   const [showResults, setShowResults] = useState(false);
   const images = useQuery(api.functions.list, {});
 
-
   const handleShowResults = () => {
     setShowResults(true);
   };
 
   const handleCloseResults = () => {
-    setShowResults(false)
+    setShowResults(false);
   };
 
   const fadeOutProps = useSpring({
     opacity: !showResults ? 1 : 0,
     display: !showResults ? "block" : "none",
+    config: { duration: 500 },
+  });
+
+  const fadeInProps = useSpring({
+    opacity: showResults ? 1 : 0,
+    display: showResults ? "block" : "none",
     config: { duration: 500 },
   });
 
@@ -56,21 +62,29 @@ function Live() {
           </div>
         </div>
       </animated.div>
-
-      <div className="results-grid">
-          {Array.isArray(images) && images[0]?.url && (
-          images.map((image) => (
-
-          <img  
-          key={image._id} src={image.url} alt="Sample" />
-          ))
-          )}
-      </div>
-      
-
-
-
-
+      <animated.div style={fadeInProps}>
+        <div className="appContainer">
+          <div className="super-parent">
+            <div className="parent">
+              <div className="results-grid">
+                {Array.isArray(images) &&
+                  images[0]?.url &&
+                  images.map((image) => (
+                    <div className="drawing-container result-item">
+                      <img
+                        className="drawing"
+                        key={image._id}
+                        src={image.url}
+                        alt="Sample"
+                      />
+                      {/* <img className="drawing" src={props.url} alt="drawing" /> */}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </animated.div>
     </>
   );
 }
