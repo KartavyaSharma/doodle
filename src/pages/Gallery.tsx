@@ -1,6 +1,6 @@
 
-import { useConvex, usePaginatedQuery } from 'convex/react'
-import { useEffect, useState } from 'react'
+import { usePaginatedQuery } from 'convex/react'
+import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import "./Gallery.css"
 
@@ -79,18 +79,8 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 }
 
 export default function Gallery() {
-    const { results, status, loadMore } = usePaginatedQuery(api.functions.list, {}, { initialNumItems: 5 });
+    const { results, status, loadMore } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 5 });
     const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
-
-    function* infiniteLoop(arr) {
-        while (true) {
-            for (let item of arr) {
-                yield item;
-            }
-        }
-    }
-
-    const infiniteDrawings = infiniteLoop(results);
 
     const nextDrawing = () => {
       console.log("swiped");
@@ -99,9 +89,16 @@ export default function Gallery() {
   
     return (
       <>
-        <Drawing key={currentIndex + 2} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-        <Drawing key={currentIndex + 1} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-        <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
+        { results.length > 2 &&
+          <Drawing key={(currentIndex + 2) % results.length} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+        }
+        { results.length > 1 &&
+          <Drawing key={(currentIndex + 1) % results.length} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+        }
+        
+        { results.length > 0 &&
+          <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
+        }
       </>
     )
 }
