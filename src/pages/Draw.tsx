@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Modal from '@/components/modal';
 import './Draw.css';
 import Button from '@/components/button';
+import { blob } from 'stream/consumers';
 
 const prompt = "an air fryer";
 const SEND_IMG_URL = import.meta.env.VITE_CONVEX_SITE_URL;
@@ -36,6 +37,7 @@ export default function Drawing() {
   const [drawCountdown, setDrawCountdown] = useState(30);
   const [clearModalOpen, setClearModalOpen] = useState(false);
   const [username, setUsername] = useState('');
+  const [needUsername, setNeedUsername] = useState(false);
   
   const startDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
       if (currentSection != PageSection.Draw) return;
@@ -97,11 +99,25 @@ export default function Drawing() {
     }
 
     setTimeout(() => {
-      setCurrentSection(PageSection.Submit)
+      setCurrentSection(PageSection.Submit);
+      saveDrawing();
     }, 1000 * drawCountdown);
   }
 
+  const saveDrawing = () => {
+    const canvas = canvasRef.current as HTMLCanvasElement
+
+    canvas.toBlob((blob) => {
+      setSelectedImage(blob);
+    })
+  }
+
   const submitForm = () => {
+    if (!username) {
+      setNeedUsername(true);
+      return;
+    }
+
     if (selectedImage) {
       fetch(SEND_IMG_URL + "/sendImage" + "?author=" + username, {
         method: "POST",
@@ -110,21 +126,19 @@ export default function Drawing() {
       }).then(() => {
         console.log("Sent Image with username:", username);
         window.location.href = `/gallery`;
-      }).catch(() => {
-        // window.location.href = `/gallery`;
+      }).catch((err) => {
+        console.log(err)
       });
     }
   };
 
   const handleClear = () => {
     setClearModalOpen(false)
-    
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+
+    const canvas = canvasRef.current as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   };
 
@@ -191,7 +205,14 @@ export default function Drawing() {
           }
 
           { currentSection == PageSection.Submit &&
-            <div>submit</div>
+            <Modal>
+              <div className='submitModal'>
+                <h1>Time's up!</h1>
+                <p>Please enter a username to submit.</p>
+                <input className={needUsername ? "redBorder" : ""} type="text" placeholder="username" onChange={(e) => setUsername(e.target.value)}/>
+                <Button onClick={submitForm} fontSize='20px'>Submit!</Button>
+              </div>
+            </Modal>
           }  
         </div>
       </div>

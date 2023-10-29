@@ -165,3 +165,31 @@
     width: 75px;
     height: 75px;
 }
+ 
+.submitModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 240px;
+}
+
+.submitModal p {
+    font-size: 20px;
+    text-align: center;
+}
+
+.submitModal input {
+    width: 80%;
+    height: 40px;
+    margin: 10px 0px;
+    padding: 0px 10px;
+    border: 3px solid #5C370A;
+    border-radius: 10px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.redBorder {
+    border-color: #EF8D8D!important;
+}
