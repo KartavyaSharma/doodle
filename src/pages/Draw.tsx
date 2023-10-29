@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Modal from '@/components/modal';
 import './Draw.css';
 import Button from '@/components/button';
-import { blob } from 'stream/consumers';
 
 const prompt = "an air fryer";
 const SEND_IMG_URL = import.meta.env.VITE_CONVEX_SITE_URL;
@@ -71,7 +70,7 @@ export default function Drawing() {
       }
   }
 
-  const endDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+  const endDrawing: React.MouseEventHandler<HTMLCanvasElement> = (_) => {
       setIsDrawing(false);
   }
 

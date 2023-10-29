@@ -1,7 +1,6 @@
 import { v } from "convex/values"
-import { query, mutation, action } from "./_generated/server"
-import { api } from "./_generated/api"
-import { PaginationResult, paginationOptsValidator } from "convex/server"
+import { query, mutation } from "./_generated/server"
+import { paginationOptsValidator } from "convex/server"
 
 // Mutation to store image object id in database
 export const sendImage = mutation({

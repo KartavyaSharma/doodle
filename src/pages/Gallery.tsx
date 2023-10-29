@@ -14,7 +14,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
     const [mouseStart, setMouseStart] = useState<number[]>([])
     const [pos, setPos] = useState([0, 0])
 
-    const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const startDrag = () => {
         if (!props.draggable) return
 
         setIsDragging(true)
@@ -79,7 +79,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 }
 
 export default function Gallery() {
-    const { results, status, loadMore } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 5 });
+    const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 5 });
     const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
 
     const nextDrawing = () => {
@@ -88,17 +88,27 @@ export default function Gallery() {
     }
   
     return (
-      <>
-        { results.length > 2 &&
-          <Drawing key={(currentIndex + 2) % results.length} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-        }
-        { results.length > 1 &&
-          <Drawing key={(currentIndex + 1) % results.length} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-        }
-        
-        { results.length > 0 &&
-          <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
-        }
-      </>
+        <>
+        <div id="galleryInfo">
+
+        </div>
+
+        <div id='galleryImages'>
+            { results.length > 2 &&
+            <Drawing key={(currentIndex + 2) % results.length} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+            }
+            { results.length > 1 &&
+            <Drawing key={(currentIndex + 1) % results.length} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+            }
+            
+            { results.length > 0 &&
+            <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
+            }
+        </div>
+
+        <div id="galleryUser">
+
+        </div>
+        </>
     )
 }
