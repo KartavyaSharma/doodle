@@ -1,134 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-.App {
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-body, html {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #FFEED3;
-  font-family: 'Inter';
-  font-size: 22px;
-}
-
-html {
+#root {
   height: 100%;
   width: 100%;
 }
 
-.text {
-  color: #5C370A;
-}
-
-.appContainer {
-  text-align: center;
-}
-
-.title {
-  font-size: 2em;
-}
-
-canvas {
-  max-width: 100%;
-}
-
-
-/* Navbar */
-.navbar-logo {
-  height: 5vh;
-}
-
-.navbar-hamburger {
-  width: 2vw;
-  height: 2vh;
-  cursor: pointer;
-  padding-right: 55px;
-  padding-bottom: 25px;
-  padding-top: 10px;
-}
-
-.navbar {
-  background-color: #FFEED3;
-}
-.navbar {
-  background-color: #FFEED3;
-  width: 100%; /* make sure it takes full width */
-}
-
-.navbar-container {
+#navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 10px;
+  padding: 20px 30px;
+  
+  @media only screen and (max-width: 767px) {
+    padding: 16px 20px;
+    /* height: 30px; */
+  }
 }
 
-.navbar-collapse {
-  width: 100%;
-  background-color: #FFEED3; /* updated color */
-  position: absolute;
-  top: 100%; /* positions it directly under the navbar */
-  left: 0; /* aligns it to the left edge of the navbar */
-  z-index: 10; /* ensures it overlays content below */
+#navLogo {
+  height: 40px;
 }
 
-.navbar-nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column; /* ensure it's column */
-  align-items: flex-start; /* aligns items to the left */
-  width: 100%;
+#navLinks {
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 
-.nav-item {
-  border-top: 0.5px solid rgba(255,238,211, 0.6); /* Adjusted color for better visibility */
-  border-bottom: 0.5px solid rgba(255,238,211, 0.6); /* Adjusted color for better visibility */
-  width: 100%;
-  text-align: left; /* aligned to the left */
+/* Media query for desktop screens */
+#navHamburger {
+  height: 25px;
+
+  @media only screen and (min-width: 768px) {
+    display: none;
+  }
 }
 
-.nav-link {
+#navMenu {
+  position: fixed;
+  width: 100%;
+  top: 72px;
+  overflow: hidden;
+  border-bottom: #5C370A 1px solid;
+  margin-bottom: 10px;
+}
+
+.navLink {
+  font-size: 20px;
+}
+
+#navMenu .navLink {
   display: block;
   padding: 15px 20px;
   text-decoration: none;
@@ -138,223 +59,32 @@ canvas {
   text-align: left; /* aligned to the left */
 }
 
-.nav-link:hover {
-  background-color: rgba(255,238,211, 0.6); /* Adjusted for better visibility */
-}
-#mainNavbar .navbar-collapse {
-  position: absolute;
-  top: 100%; /* positions it directly under the navbar */
-  left: 0; /* aligns it to the left edge of the navbar */
-  z-index: 1000; /* ensures it overlays content below */
-}
-#mainNavbar .navbar-collapse {
-  box-shadow: 0px 8px 16px 0px rgba(255,238,211,0.6); 
-}
-
-#mainNavbar {
-  position: fixed; /* Fixed positioning makes it stick to the top regardless of scrolling */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* This ensures the navbar stays above other elements on the page */
-}
-
-.navbar-collapse {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #5C370A;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* optional for a subtle shadow effect */
-}
-
-
-/* Drawing Colora */
-.colorButton {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin: 5px;
-  cursor: pointer;
-  display: inline-block;
-}
-
-.deleteButton {
-  display: block;
-  margin: 10px auto;
-  cursor: pointer;
-}
-
-
-.color-brown {
-  background-color: #BB803B;
-}
-
-.color-red {
-  background-color: #EF8D8D;
-}
-
-.color-yellow {
-  background-color: #F6EC90;
-}
-
-.color-green {
-  background-color: #A5F2A8;
-}
-
-.color-blue {
-  background-color: #9DA7F9;
-}
-
-.color-purple {
-  background-color: #D098EA;
-}
-
-.circle-button {
-  z-index: 1;
-}
-
-.circle-button.selected {
-  z-index: 2;
-}
-
-
-/* Button */
-.prompt-button {
-  background-color: #FFEED3;
-  border-color: #5C370A;
-  /* border-bottom: 10px solid; */
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-family: 'Arial', sans-serif; /* Adjust to the font you want */
-  font-size: 18px;
-  font-weight: bold;
-  color: #5C370A;
-  cursor: pointer;
-  outline: none;
-  box-shadow: 0px 5px #5C370A; /* Gives the 3D appearance */
-  transition: transform 0.2s;
-}
-
-
-.prompt-button:hover {
-  transform: translateY(-2px);
-}
-
-.prompt-button:active {
-  transform: translateY(0);
-}
-
-.super-parent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.column-60 .live-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  width: 427px;
-  height: 157px;
-}
-
-.live-large {
-  font-size: 60px;
-  font-weight: bold;
-  text-align: right;
-}
-
-.live-normal {
-  font-size: 22px;
-  text-align: right;
-  margin-top: 7%;
-}
-
-.live-link {
-  text-decoration: underline;
-}
-
-.parent {
-  display: flex;
-  max-width: 100%;
-  /* padding: 15%; */
-  padding-left: 15%;
-  padding-right: 30%;
-  padding-top: 10%;
-}
-
-.column-40 {
-  flex: 0 0 70%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 5%;
-}
-
-.column-60 {
-  flex: 0 0 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.column-40 img {
-  /* max-width: 90%; */
-  height: 439px;
-  width: 439px;
-  border-radius: 20px;
-}
-
-.button-container {
-  padding-top: 12%;
-  text-align: center;
-}
-
-.button {
-  padding: 10px 20px;
-  border-radius: 15px;
-  border: 3px solid #5C370A; /* Border with consistent color */
-  box-shadow: 0 10px 20px 0 #5C370A; /* Solid shadow with the same color as the border */
-  background-color: #FFEED3;
-  color: #5C370A;
-  font-size: 18px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* .sqs-block-button-element  {
-  box-shadow: 10px 10px #000;
-  border: 2px solid #000 !important;
-  transition: all ease-in 0.2s !important;
-}
-
-.sqs-block-button-element:hover {
-  box-shadow: none;
-  transform: translateY(4px) !important;
-  transition: all ease-in 0.2s;
-  opacity: 1 !important;
-} */
-
-.sqs-block-button-element {
-  box-shadow: 0px 8px #5C370A;
-  border: 2px solid #5C370A !important;
-  transition: all ease-in 0.2s !important;
-  display: inline-block;
-  padding: 12px 24px; /* Increase padding to make the button larger */
-  text-align: center;
+#navLinks .navLink {
+  padding-left: 30px;
   text-decoration: none;
-  font-size: 22px; /* Increase font size to make the text larger */
-  font-weight: bold;
-  color: #5C370A;
   background-color: #FFEED3;
-  cursor: pointer;
-  border-radius: 10px; /* Rounded border for the button */
+  color: #5C370A;
+  text-align: left; /* aligned to the left */
 }
 
-.sqs-block-button-element:hover {
-  box-shadow: none;
-  transform: translateY(4px) !important;
-  transition: all ease-in 0.2s;
-  opacity: 1 !important;
+
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background: #FFEED3;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+* {
+  font-family: 'Inter', sans-serif;
+  color: #5C370A;
 }
