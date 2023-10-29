@@ -120,6 +120,7 @@ export default function Drawing() {
     if (selectedImage) {
       fetch(SEND_IMG_URL + "/sendImage" + "?author=" + username, {
         method: "POST",
+        mode: 'no-cors',
         headers: { "Content-Type": selectedImage.type },
         body: selectedImage,
       }).then(() => {
