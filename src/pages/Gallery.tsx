@@ -12,7 +12,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
     const [isDragging, setIsDragging] = useState(false)
     const [mouseStart, setMouseStart] = useState<number[]>([])
-    const [pos, setPos] = useState([0, 40])
+    const [pos, setPos] = useState([0, 0])
 
     const startDrag = () => {
         if (!props.draggable) return
@@ -20,7 +20,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
         setIsDragging(true)
     }
 
-    const drag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const drag = (e: any) => {
         if (!isDragging) return
 
         if (mouseStart.length === 0) {
@@ -36,15 +36,15 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
         }        
     }
 
-    const endDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const endDrag = (e: any) => {
         const deltaX = e.clientX - mouseStart[0]
         const deltaY = e.clientY - mouseStart[1]
 
         const deltaPos = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
         if (deltaPos > 100) {
-            const x = deltaX / deltaPos * (window.innerWidth + window.innerHeight)
-            const y = deltaY / deltaPos * (window.innerWidth + window.innerHeight)
+            const x = deltaX / deltaPos * (window.innerWidth + window.innerHeight) * 2
+            const y = deltaY / deltaPos * (window.innerWidth + window.innerHeight) * 2
 
             setPos([x, y])
             
@@ -72,6 +72,9 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
             onMouseDown={startDrag}
             onMouseMove={drag}
             onMouseUp={endDrag}
+            onTouchStart={startDrag}
+            onTouchMove={(e) => drag(e.touches[0])}
+            onTouchEnd={(e) => endDrag(e.changedTouches[0])}
         >
             <img className="drawing" src={props.url} alt='drawing'/>
         </div>
@@ -86,7 +89,6 @@ export default function Gallery() {
       console.log("swiped");
       setCurrentIndex(prevIndex => (prevIndex + 1) % results.length);  // Increment and wrap around
     }
-    
   
     return (
         <>

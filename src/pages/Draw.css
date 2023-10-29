@@ -18,7 +18,7 @@
     border: 3px solid #5C370A;
     border-radius: 10px;
     background-color: #ffffff;
-    margin: 20px;
+    margin: 20px 32px;
 
     display: flex;
     flex-direction: column;
@@ -110,10 +110,11 @@
     width: 100%;
     height: 100%;
     border-radius: 6px;
+    touch-action: none;
 }
 
 #colorPicker {
-    padding: 20px;
+    padding: 5px 20px;
     height: 40px;
 
     display: flex;

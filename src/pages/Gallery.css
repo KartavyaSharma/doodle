@@ -7,9 +7,11 @@
     position: absolute;
     margin: auto;
 
-    max-width: 75vw;
+    max-width: 55vw;
     max-height: 50vh;
     z-index: 1000;
+
+    touch-action: none;
 }
 
 .drawing {
@@ -53,6 +55,7 @@
 
 #galleryImages {
     flex: 1;
+    position: relative;
 }
 
 #galleryUserContainer {
@@ -67,11 +70,12 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 40px 0;
+    margin: 10px 0;
 }
 
 #galleryUser p {
     font-size: 24px;
+    margin: 0;
 }
 
 #galleryUser img {
