@@ -108,7 +108,7 @@ function Live() {
                           <img
                             className="drawing-live drawing-image"
                             key={image._id}
-                            src={image.url}
+                            src={image.url as string}
                             alt="Sample"
                           />
                           <div style={{ padding: "5px" }}>{image.author}</div>
