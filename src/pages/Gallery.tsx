@@ -1,6 +1,6 @@
 
 import { usePaginatedQuery } from 'convex/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import "./Gallery.css"
 
@@ -13,6 +13,14 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
     const [isDragging, setIsDragging] = useState(false)
     const [mouseStart, setMouseStart] = useState<number[]>([])
     const [pos, setPos] = useState([0, 0])
+
+    const [opacity, setOpacity] = useState(0)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setOpacity(1)
+        }, 100)
+    })
 
     const startDrag = () => {
         if (!props.draggable) return
@@ -48,7 +56,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
             setPos([x, y])
             
-            setTimeout(props.swiped, 1000)
+            props.swiped()
         } else {
             setPos([0, 0])
             setAngle(initialAngle)    
@@ -68,6 +76,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
                 right: -pos[0],
                 top: pos[1],
                 bottom: -pos[1],
+                opacity: opacity
             }} 
             onMouseDown={startDrag}
             onMouseMove={drag}
@@ -84,10 +93,24 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 export default function Gallery() {
     const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 20 });
     const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
+    const [author, setAuthor] = useState('')
+    const [hideUser, setHideUser] = useState(false)
+
+    useEffect(() => {
+        setAuthor(results[currentIndex]?.author)
+    }, [results])
 
     const nextDrawing = () => {
-      console.log("swiped");
-      setCurrentIndex(prevIndex => (prevIndex + 1) % results.length);  // Increment and wrap around
+        setHideUser(true)
+
+        setTimeout(() => {
+            setAuthor(results[(currentIndex + 1) % results.length]?.author)
+            setHideUser(false)
+        }, 250)
+
+        setTimeout(() => {
+            setCurrentIndex(prevIndex => (prevIndex + 1) % results.length);  // Increment and wrap around
+        }, 500);
     }
   
     return (
@@ -114,8 +137,7 @@ export default function Gallery() {
 
             <div id="galleryUserContainer">
                 <div id="galleryUser">
-                    <p>{results[currentIndex]?.author}</p>
-                    {/* <img src='./heart.svg' alt='heart' /> */}
+                    <p style={{top: hideUser ? "100vh" : "0" }}>{author}</p>
                 </div>
             </div>
         </div>

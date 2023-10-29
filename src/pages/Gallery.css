@@ -12,6 +12,8 @@
     z-index: 1000;
 
     touch-action: none;
+
+    transition: opacity 0.25s ease-in-out;
 }
 
 .drawing {
@@ -76,6 +78,9 @@
 #galleryUser p {
     font-size: 24px;
     margin: 0;
+
+    position: relative;
+    transition: top 0.25s ease-in-out;
 }
 
 #galleryUser img {
