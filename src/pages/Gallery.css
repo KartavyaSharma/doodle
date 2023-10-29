@@ -7,7 +7,7 @@
     position: absolute;
     margin: auto;
 
-    max-width: 75vw;
+    max-width: 55vw;
     max-height: 50vh;
     z-index: 1000;
 
@@ -55,6 +55,7 @@
 
 #galleryImages {
     flex: 1;
+    position: relative;
 }
 
 #galleryUserContainer {

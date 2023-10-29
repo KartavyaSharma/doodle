@@ -12,7 +12,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
     const [isDragging, setIsDragging] = useState(false)
     const [mouseStart, setMouseStart] = useState<number[]>([])
-    const [pos, setPos] = useState([0, 40])
+    const [pos, setPos] = useState([0, 0])
 
     const startDrag = () => {
         if (!props.draggable) return
@@ -43,14 +43,14 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
         const deltaPos = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
         if (deltaPos > 100) {
-            const x = deltaX / deltaPos * (window.innerWidth + window.innerHeight)
-            const y = deltaY / deltaPos * (window.innerWidth + window.innerHeight)
+            const x = deltaX / deltaPos * (window.innerWidth + window.innerHeight) * 2
+            const y = deltaY / deltaPos * (window.innerWidth + window.innerHeight) * 2
 
             setPos([x, y])
             
             setTimeout(props.swiped, 1000)
         } else {
-            setPos([0, 40])
+            setPos([0, 0])
             setAngle(initialAngle)    
         }
 
@@ -82,7 +82,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 }
 
 export default function Gallery() {
-    const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 5 });
+    const { results } = usePaginatedQuery(api.functions.list as any, {}, { initialNumItems: 20 });
     const [currentIndex, setCurrentIndex] = useState(0);  // State to keep track of the current index
 
     const nextDrawing = () => {

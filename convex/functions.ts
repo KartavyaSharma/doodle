@@ -22,7 +22,7 @@ export const list = query({
     handler: async (ctx, args) => {
         let doodles;
         if (args.paginationOpts){
-            doodles = await ctx.db.query("doodles").paginate(args.paginationOpts) 
+            doodles = await ctx.db.query("doodles").order("desc").paginate(args.paginationOpts) 
 
             for (let i = 0 ; i < doodles.page.length; i++){
                 doodles.page[i] = {
@@ -35,7 +35,7 @@ export const list = query({
             }
             return doodles
         } else {
-            doodles = await ctx.db.query("doodles").collect();
+            doodles = await ctx.db.query("doodles").order("desc").collect();
         }
         return Promise.all(
             doodles.map(async (doodle) => ({
