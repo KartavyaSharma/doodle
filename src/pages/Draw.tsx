@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Modal from 'react-modal';
+import Modal from '@/components/modal';
 import './Draw.css';
 import Button from '@/components/button';
 
@@ -34,7 +34,7 @@ export default function Drawing() {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [promptCountdown, setPromptCountdown] = useState(3);
   const [drawCountdown, setDrawCountdown] = useState(30);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clearModalOpen, setClearModalOpen] = useState(false);
   const [username, setUsername] = useState('');
   
   const startDrawing: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
@@ -73,14 +73,6 @@ export default function Drawing() {
       setIsDrawing(false);
   }
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const startPromptCountdown = () => {
     setCurrentSection(PageSection.Countdown)
 
@@ -110,7 +102,6 @@ export default function Drawing() {
   }
 
   const submitForm = () => {
-    closeModal();
     if (selectedImage) {
       fetch(SEND_IMG_URL + "/sendImage" + "?author=" + username, {
         method: "POST",
@@ -125,20 +116,9 @@ export default function Drawing() {
     }
   };
 
-  useEffect(() => {
-
-    if (selectedImage) {
-      openModal();
-    }
-    console.log(selectedImage, "!!!!!!!!");
-  }, [selectedImage])
-
-
-  const handleColorChange = (color: string) => {
-    setColorChoice(color);
-  };
-
-  const handleDelete = () => {
+  const handleClear = () => {
+    setClearModalOpen(false)
+    
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -160,6 +140,18 @@ export default function Drawing() {
         <div id="drawCountdown">{drawCountdown}</div>
       </div>
     }
+
+    { clearModalOpen && (
+      <Modal onClickOut={() => setClearModalOpen(false)}>
+        <div className="closeModal">
+          <h2 style={{textAlign: "center"}}>Clear entire canvas?</h2>
+          <div className="closeOptions">
+            <Button onClick={() => setClearModalOpen(false)}><img src="./x.svg" alt="cancel" /></Button>
+            <Button onClick={handleClear} color='red'><img src="./check.svg" alt="confirm" /></Button>
+          </div>
+        </div>
+      </Modal>
+    )}
 
     <div id="drawPage"> 
       <div id="canvasContainer">
@@ -209,11 +201,16 @@ export default function Drawing() {
           <>
             <div className="colors">
               {colors.map((color) => (
-                <div key={color} className={' colorButton color-' + color + (colorChoice == color ? ' colorButtonSelected' : '')} /> 
+                <div 
+                  key={color} 
+                  className={' colorButton ' + (colorChoice == color ? ' colorButtonSelected' : '')} 
+                  style={{backgroundColor: color}}
+                  onClick={() => setColorChoice(color)}
+                /> 
               ))}
             </div>
 
-            <img src="./delete.svg" alt="delete"/>
+            <img src="./delete.svg" alt="delete" onClick={() => setClearModalOpen(true)}/>
           </>
         }
       </div>
