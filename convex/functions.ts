@@ -34,9 +34,9 @@ export const list = query({
                 }
             }
             return doodles
-        } else {
-            doodles = await ctx.db.query("doodles").order("desc").collect();
         }
+        doodles = await ctx.db.query("doodles").order("desc").collect();
+        
         return Promise.all(
             doodles.map(async (doodle) => ({
                 ...doodle,
