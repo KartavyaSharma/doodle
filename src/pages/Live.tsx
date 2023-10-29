@@ -5,7 +5,7 @@ import "../App.css";
 import "./Live.css";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-const QR_IMAGE_PATH = "src/assets/qr-sample.png";
+const QR_IMAGE_PATH = "./qr-sample.png";
 
 const maxAngle = 8;
 
@@ -54,7 +54,7 @@ function Live() {
                 </div>
               </div>
               <div className={`column-40`}>
-                <img src="./qr-sample.png" alt="QR Image" />
+                <img src={QR_IMAGE_PATH} alt="QR Image" />
               </div>
             </div>
             <div className="button-container">
