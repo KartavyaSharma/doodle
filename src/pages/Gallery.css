@@ -7,11 +7,12 @@
     position: absolute;
     margin: auto;
 
-    max-width: 75vw;
-    max-height: 50vh;
+    max-width: 60vw;
+    max-height: 45vh;
     z-index: 1000;
 
     touch-action: none;
+    bottom: -80px!important;
 }
 
 .drawing {
