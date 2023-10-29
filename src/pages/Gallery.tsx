@@ -12,7 +12,7 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
     const [isDragging, setIsDragging] = useState(false)
     const [mouseStart, setMouseStart] = useState<number[]>([])
-    const [pos, setPos] = useState([0, 0])
+    const [pos, setPos] = useState([0, 40])
 
     const startDrag = () => {
         if (!props.draggable) return
@@ -90,25 +90,32 @@ export default function Gallery() {
   
     return (
         <>
-        <div id="galleryInfo">
+        <div id="gallery">
+            <div id="galleryInfo">
+                <h1>Gallery</h1>
+                <p>"an air fryer"</p>
+                <p>(10/29)</p>
+            </div>
 
-        </div>
+            <div id='galleryImages'>
+                { results.length > 2 &&
+                    <Drawing key={(currentIndex + 2) % results.length} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+                }
+                { results.length > 1 &&
+                    <Drawing key={(currentIndex + 1) % results.length} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
+                }
+                
+                { results.length > 0 &&
+                    <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
+                }
+            </div>
 
-        <div id='galleryImages'>
-            { results.length > 2 &&
-            <Drawing key={(currentIndex + 2) % results.length} url={results[(currentIndex + 2) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-            }
-            { results.length > 1 &&
-            <Drawing key={(currentIndex + 1) % results.length} url={results[(currentIndex + 1) % results.length]?.url} draggable={false} swiped={nextDrawing} />
-            }
-            
-            { results.length > 0 &&
-            <Drawing key={currentIndex} url={results[currentIndex]?.url} draggable={true} swiped={nextDrawing} />
-            }
-        </div>
-
-        <div id="galleryUser">
-
+            <div id="galleryUserContainer">
+                <div id="galleryUser">
+                    <p>{results[currentIndex]?.author}</p>
+                    {/* <img src='./heart.svg' alt='heart' /> */}
+                </div>
+            </div>
         </div>
         </>
     )
