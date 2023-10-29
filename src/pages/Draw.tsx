@@ -171,7 +171,7 @@ export default function Drawing() {
       <div id="canvasContainer">
         <div id="canvas">
           { currentSection == PageSection.Start && (<>
-            <h1 className='logo-with-text'><span>A new</span> <img src='./logo.svg' alt='Logo' className='logo-in-text' /></h1>
+            <h1 className='logo-with-text'><span>one</span> <img src='./logo.svg' alt='Logo' className='logo-in-text' /></h1>
             <h1>every day</h1>
             <h1>across the world</h1>
             <br/>
