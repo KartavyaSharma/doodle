@@ -25,15 +25,15 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
         if (mouseStart.length === 0) {
             setMouseStart([e.clientX, e.clientY])
-        }
+        } else {
+            const deltaX = e.clientX - mouseStart[0]
+            const deltaY = e.clientY - mouseStart[1]
+            setPos([deltaX, deltaY])
 
-        const deltaX = e.clientX - mouseStart[0]
-        const deltaY = e.clientY - mouseStart[1]
-        setPos([deltaX, deltaY])
+            const deltaAngle = deltaX / 20
 
-        const deltaAngle = deltaX / 20
-
-        setAngle(initialAngle + deltaAngle)
+            setAngle(initialAngle + deltaAngle)
+        }        
     }
 
     const endDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -48,14 +48,14 @@ function Drawing(props: { url: string, draggable: boolean, swiped: () => void })
 
             setPos([x, y])
             
-            props.swiped()
+            setTimeout(props.swiped, 1000)
         } else {
             setPos([0, 0])
             setAngle(initialAngle)    
-
-            setIsDragging(false)
-            setMouseStart([])    
         }
+
+        setIsDragging(false)
+        setMouseStart([])
     }
 
     return (
@@ -91,10 +91,9 @@ export default function Gallery() {
   }, [])
 
   const nextDrawing = () => {
-    setDrawings(drawings.slice(1))
     client.query(api.functions.list, {limit: 1})
         .then((result) => {
-          setDrawings([...drawings, ...result])
+          setDrawings([...drawings.slice(1), ...result])
           console.log(drawings)
         })
   }
