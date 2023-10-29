@@ -1,0 +1,32 @@
+.button {
+    border: 3px solid #5C370A;
+    border-radius: 20px;
+
+    box-shadow: 0px 6px #5C370A;
+
+    padding: 10px 16px;
+}
+
+.button-default {
+    background-color: #FFEED3;
+}
+
+.button-red {
+    background-color: #EF8D8D;
+}
+
+.button-yellow {
+    background-color: #F6EC90;
+}
+
+.button-green {
+    background-color: #A5F2A8;
+}
+
+.button-blue {
+    background-color: #9DA7F9;
+}
+
+.button-purple {
+    background-color: #D098EA;
+}

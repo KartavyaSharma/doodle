@@ -3,62 +3,51 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import Drawing from './pages/Draw';
+import Draw from './pages/Draw';
 import Gallery from './pages/Gallery';
 import Live from './pages/Live';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen((prevState) => !prevState);
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div id="mainNavbar">
-      <nav className="navbar navbar-dark">
-        <div className="navbar-container">
-          <div className="navbar-brand">
-            <img src="./logo.svg" alt="Logo" className="small-logo" />
-          </div>
-          
-          <div className="navbar-hamburger">
-            <img src={isMenuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" onClick={toggleMenu} className="small-logo" />
-          </div>
+    <nav>
+      <div id="navbar">
+        <Link id="navLogo" to="/">
+          <img src="./logo.svg" alt="Logo"/>
+        </Link>
 
+        <div id="navLinks">
+          <Link to="/leaderboard" className="navLink" onClick={() => setMenuOpen(false)}>Leaderboard</Link>
+          <Link to="/gallery" className="navLink" onClick={() => setMenuOpen(false)}>Gallery</Link>
+          <Link to="/live" className="navLink" onClick={() => setMenuOpen(false)}>Live</Link>
         </div>
-      </nav>
+        <img id="navHamburger" src={menuOpen ? "./x.svg" : "./hamburger.svg"} alt="Menu Toggle" onClick={() => setMenuOpen(!menuOpen)} />
+      </div>
 
-      {isMenuOpen && (
-        <div className="navbar-collapse">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/gallery" className="nav-link" onClick={toggleMenu}>
-                Gallery
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/live" className="nav-link" onClick={toggleMenu}>
-                Live
-              </Link>
-            </li>
-          </ul>
+      { menuOpen && 
+        <div id="navMenu">
+          <Link to="/leaderboard" className="navLink" onClick={() => setMenuOpen(false)}>Leaderboard</Link>
+          <Link to="/gallery" className="navLink" onClick={() => setMenuOpen(false)}>Gallery</Link>
+          <Link to="/live" className="navLink" onClick={() => setMenuOpen(false)}>Live</Link>
         </div>
-      )}
-    </div>
-  );
+      }
+    </nav>
+  )
 };
 
 function App() {
   return (
-    <div>
+    <>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Drawing />} />
-        <Route path="/live" element={<Live />} />
-        <Route path="/gallery" element={<Gallery />} />
-      </Routes>
-    </div>
+      <main>
+        <Routes>
+          <Route path="/" element={<Draw/>} />
+          <Route path="/live" element={<Live/>} />
+          <Route path="/gallery" element={<Gallery/>} />
+        </Routes>
+      </main>
+    </>
   );
 }
 
